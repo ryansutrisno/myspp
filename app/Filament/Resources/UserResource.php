@@ -43,9 +43,9 @@ class UserResource extends Resource
                 Forms\Components\FileUpload::make('scanijazah')
                     ->image()
                     ->columnSpanFull(),
-                // Forms\Components\Select::make('roles')
-                //     ->multiple()
-                //     ->relationship('roles', 'name'),
+                Forms\Components\Select::make('roles')
+                    ->multiple()
+                    ->relationship('roles', 'name'),
             ]);
     }
 
@@ -59,10 +59,10 @@ class UserResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->searchable(),
-                // Tables\Columns\TextColumn::make('roles.name'),
                 Tables\Columns\ImageColumn::make('image'),
                 Tables\Columns\ImageColumn::make('scanijazah')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('roles.name'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
