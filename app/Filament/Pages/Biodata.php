@@ -17,7 +17,7 @@ class Biodata extends Page
 {
     use HasPageShield;
 
-    protected static ?string $navigationIcon = 'heroicon-o-document-text';
+    protected static ?string $navigationIcon = 'heroicon-o-user';
 
     protected static string $view = 'filament.pages.biodata';
 
