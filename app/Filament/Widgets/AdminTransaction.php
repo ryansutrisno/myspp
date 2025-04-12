@@ -7,6 +7,7 @@ use BezhanSalleh\FilamentShield\Traits\HasWidgetShield;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
+use Illuminate\Database\Eloquent\Collection;
 
 class AdminTransaction extends BaseWidget
 {

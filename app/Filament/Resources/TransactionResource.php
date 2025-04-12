@@ -100,7 +100,18 @@ class TransactionResource extends Resource
                 //
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\Action::make('approve')
+                    ->label('Approve')
+                    ->color('success')
+                    ->icon('heroicon-o-check-circle')
+                    ->visible(fn(Transaction $record): bool => $record->payment_status === 'pending')
+                    ->action(function (Transaction $record) {
+                        $record->update(['payment_status' => 'success']);
+                    })
+                    ->requiresConfirmation()
+                    ->modalHeading('Transaksi Disetujui')
+                    ->modalDescription('Apakah anda yakin ingin menyetujui transaksi ini? Aksi ini tidak bisa dibatalkan.')
+                    ->modalButton('Approve'),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

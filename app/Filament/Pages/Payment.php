@@ -2,13 +2,13 @@
 
 namespace App\Filament\Pages;
 
-use App\Models\Transaction;
 use BezhanSalleh\FilamentShield\Traits\HasPageShield;
-use Filament\Forms\Components\FileUpload;
-use Filament\Forms\Components\Select;
-use Filament\Forms\Form;
-use Filament\Notifications\Notification;
 use Filament\Pages\Page;
+use Filament\Forms\Form;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Components\FileUpload;
+use App\Models\Transaction;
+use Filament\Notifications\Notification;
 use Illuminate\Support\Facades\Storage;
 
 class Payment extends Page
@@ -16,15 +16,14 @@ class Payment extends Page
     use HasPageShield;
 
     protected static ?string $navigationIcon = 'heroicon-o-credit-card';
-
     protected static string $view = 'filament.pages.payment';
 
     public $transaction;
-    public ?array $data = [];
+    public ?array $data = []; //properti untuk menampung data formulir
 
-    public static function shouldRegisterNavigation(array $parameters = []): bool
+    public static function shouldRegisterNavigation(): bool
     {
-        return false;
+        return false; // Menyembunyikan dari sidebar
     }
 
     public function mount(int $id): void
@@ -32,10 +31,16 @@ class Payment extends Page
         // Ambil transaksi berdasarkan ID
         $this->transaction = Transaction::findOrFail($id);
 
+        // Isi data awal formulir berdasarkan transaksi
         $this->data = [
             'payment_method' => $this->transaction->payment_method ?? null,
-            'payment_proof' => $this->transaction->payment_proof ?? null,
+            'payment_proof' => $this->transaction->payment_proof ?? '',
         ];
+        // Debugging statement removed or replaced with logging if needed
+        logger($this->transaction->payment_proof);
+
+        // Uncomment the following line for debugging if needed
+        // dd($this->transaction->payment_proof);
     }
 
     public function form(Form $form): Form
@@ -46,45 +51,49 @@ class Payment extends Page
                     ->label('Metode Pembayaran')
                     ->options([
                         'cash' => 'Cash',
-                        'transfer' => 'Transfer'
+                        'transfer' => 'Transfer',
                     ])
                     ->required()
-                    ->default($this->data['payment_method']),
+                    ->default($this->data['payment_method']), // Menggunakan data awal
+
                 FileUpload::make('payment_proof')
                     ->label('Bukti Pembayaran')
                     ->image()
                     ->required()
-                    ->directory('payment_proof')
+                    ->directory('payment_proofs') // Menentukan direktori penyimpanan
                     ->columnSpanFull(),
-            ])
-            ->statePath('data');
+            ])->statePath('data'); // Mengikat data ke properti $data
     }
 
     public function edit()
     {
-        // validate form data
+        // Validasi data
         $validatedData = $this->form->getState();
 
-        // hapus file lama jika file baru diunggah
+        // Hapus file lama jika file baru diunggah
         if (isset($validatedData['payment_proof']) && $validatedData['payment_proof'] !== $this->transaction->payment_proof) {
             if ($this->transaction->payment_proof) {
                 Storage::delete($this->transaction->payment_proof);
             }
+        } else {
+            // Jika tidak ada file baru, gunakan file lama
+            $validatedData['payment_proof'] = $this->transaction->payment_proof;
         }
-        // update transaksi
+
+        // Update transaksi
         $this->transaction->update([
             'payment_method' => $validatedData['payment_method'],
-            'payment_proof' => $validatedData['payment_proof'],
+            'payment_proof' => $validatedData['payment_proof']
         ]);
 
-        // kirim notifikasi
+        // Kirim notifikasi
         Notification::make()
             ->title('Pembayaran Berhasil!')
-            ->body('Terima kasih telah melakukan pembayaran, mohon tunggu persetujuan oleh Admin')
+            ->body('Terima Kasih Telah Membayar Mohon Tunggu Persetujuan Oleh Admin')
             ->success()
             ->send();
 
-        // redirect ke halaman admin
+        // Redirect ke halaman admin
         return redirect('/admin');
     }
 }
