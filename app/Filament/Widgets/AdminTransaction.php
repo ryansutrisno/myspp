@@ -24,19 +24,19 @@ class AdminTransaction extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('code')
-                    ->label('Transaction Code')
+                    ->label('Kode Transaksi')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('users.name')
-                    ->label('User')
+                    ->label('Pengguna')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('departments.name')
-                    ->label('Department'),
+                    ->label('Departemen'),
                 Tables\Columns\TextColumn::make('departments.semester')
                     ->label('Semester'),
                 Tables\Columns\TextColumn::make('payment_method')
-                    ->label('Payment Method'),
+                    ->label('Metode Pembayaran'),
                 Tables\Columns\TextColumn::make('payment_status')
-                    ->label('Payment Status')
+                    ->label('Status Pembayaran')
                     ->badge()
                     ->color(fn(string $state): string => match ($state) {
                         'pending' => 'warning',
@@ -48,7 +48,7 @@ class AdminTransaction extends BaseWidget
                     ->width(450)  // Set the width of the preview
                     ->height(225),
                 Tables\Columns\TextColumn::make('departments.cost')
-                    ->label('Cost')
+                    ->label('Biaya')
                     ->money('IDR'),
                 Tables\Columns\TextColumn::make('created_at') // Waktu pembuatan
                     ->label('Created At')

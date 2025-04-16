@@ -41,11 +41,13 @@ class DepartmentResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
+                    ->label('Nama Departemen')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('semester')
                     ->numeric()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('cost')
+                    ->label('Biaya')
                     ->money('IDR')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')

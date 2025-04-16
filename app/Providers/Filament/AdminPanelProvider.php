@@ -29,6 +29,8 @@ class AdminPanelProvider extends PanelProvider
             ->path('admin')
             ->login()
             ->registration(Register::class)
+            ->brandName('My SPP App')
+            ->unsavedChangesAlerts()
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -58,6 +60,8 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->plugins([
                 \BezhanSalleh\FilamentShield\FilamentShieldPlugin::make(),
+                \Filament\SpatieLaravelTranslatablePlugin::make()
+                    ->defaultLocales(['en', 'id']),
             ]);
     }
 }

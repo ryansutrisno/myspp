@@ -59,14 +59,19 @@ class TransactionResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('code')
+                    ->label('Kode Transaksi')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('users.name')
+                    ->label('Nama')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('users.phone')
+                    ->label('Phone')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('payment_method')
+                    ->label('Payment Method')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('payment_status')
+                    ->label('Payment Status')
                     ->badge()
                     ->color(fn(string $state): string => match ($state) {
                         'pending' => 'warning',
@@ -85,7 +90,8 @@ class TransactionResource extends Resource
                     ->label('Semester')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('departments.cost')
-                    ->label('Cost')
+                    ->label('Biaya')
+                    ->money('IDR')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
